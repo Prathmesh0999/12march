@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>For Tinny Terror 🌸</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:ital,wght@0,400;1,700&display=swap" rel="stylesheet">
@@ -112,7 +112,7 @@
         /* Elegant Paper Letter */
         .letter-content {
             position: fixed;
-            top: 55%; /* Start slightly lower for the slide-up animation */
+            top: 50%;
             left: 50%;
             transform: translate(-50%, -40%) scale(0.8);
             width: 85%;
@@ -122,7 +122,7 @@
             color: #222;
             opacity: 0;
             visibility: hidden;
-            transition: all 0.9s cubic-bezier(0.19, 1, 0.22, 1);
+            transition: all 0.7s cubic-bezier(0.19, 1, 0.22, 1);
             z-index: 200;
             border-radius: 2px;
             box-shadow: 0 0 0 10px var(--paper), 0 0 0 11px rgba(0,0,0,0.05), 20px 20px 80px rgba(0,0,0,0.4);
@@ -137,7 +137,6 @@
 
         .letter-content h1 { font-family: 'Dancing Script', cursive; font-size: 2.5rem; color: var(--accent); margin: 0 0 15px 0; }
         .letter-content p { font-size: 1.05rem; line-height: 1.7; color: #444; margin: 0 0 15px 0; }
-        
         .signature { font-family: 'Dancing Script', cursive; font-size: 1.8rem; margin-top: 25px; }
 
         .close-btn {
@@ -151,7 +150,6 @@
             margin-top: 20px;
             transition: 0.3s;
         }
-        .close-btn:hover { color: var(--accent); letter-spacing: 4px; }
 
         /* Fullscreen View */
         .fullscreen-photo {
@@ -165,6 +163,28 @@
         }
         #full-img { max-height: 80vh; border: 10px solid white; box-shadow: 0 0 30px rgba(0,0,0,0.5); }
 
+        /* --- MOBILE RESPONSIVE OVERRIDES --- */
+        @media (max-width: 768px) {
+            .lyrics { font-size: 2.5rem; }
+            .aura { display: none; }
+            
+            .scatter-photo { 
+                width: 110px; 
+                padding: 5px 5px 15px 5px; 
+            }
+            .scatter-photo img { height: 110px; }
+
+            /* Corner positioning for mobile so they don't block the card */
+            .p1 { top: 5% !important; left: 5% !important; }
+            .p2 { top: 5% !important; right: 5% !important; }
+            .p3 { bottom: 5% !important; left: 5% !important; }
+            .p4 { bottom: 5% !important; right: 5% !important; }
+
+            .card-container { width: 280px; height: 180px; }
+            .letter-content { padding: 25px; width: 90%; }
+            .letter-content h1 { font-size: 1.8rem; }
+            #full-img { max-width: 90%; }
+        }
     </style>
 </head>
 <body>
@@ -174,16 +194,16 @@
     <div class="lyrics" style="top: 15%;">I love annoying you more than anything 😁😁 • My favorite person • Forever & Always</div>
     <div class="lyrics" style="top: 75%; animation-delay: -12s; opacity: 0.03;">Your smile is my favorite sight • Millo mere say!!!! 😭😭</div>
 
-    <div class="scatter-photo" style="top: 10%; left: 8%; transform: rotate(-12deg);" onclick="zoom(this)">
+    <div class="scatter-photo p1" style="top: 10%; left: 8%; transform: rotate(-12deg);" onclick="zoom(this)">
         <img src="1.jpg" alt="Memory 1">
     </div>
-    <div class="scatter-photo" style="top: 15%; right: 12%; transform: rotate(15deg);" onclick="zoom(this)">
+    <div class="scatter-photo p2" style="top: 15%; right: 12%; transform: rotate(15deg);" onclick="zoom(this)">
         <img src="2.jpg" alt="Memory 2">
     </div>
-    <div class="scatter-photo" style="bottom: 12%; left: 18%; transform: rotate(-5deg);" onclick="zoom(this)">
+    <div class="scatter-photo p3" style="bottom: 12%; left: 18%; transform: rotate(-5deg);" onclick="zoom(this)">
         <img src="3.jpg" alt="Memory 3">
     </div>
-    <div class="scatter-photo" style="bottom: 18%; right: 10%; transform: rotate(8deg);" onclick="zoom(this)">
+    <div class="scatter-photo p4" style="bottom: 18%; right: 10%; transform: rotate(8deg);" onclick="zoom(this)">
         <img src="4.jpg" alt="Memory 4">
     </div>
 
@@ -193,22 +213,17 @@
 
     <div class="letter-content" id="letter">
         <h1>Happy Birthday,<br>Tinny Terror 🌸</h1>
-        
         <p style="font-style: italic; color: #888; font-size: 0.9rem;">
             "If I had a flower for every time I thought of you... I could walk through my garden forever 💐."
         </p>
-        
         <p>
             Wishing you the happiest of birthdays! I hope today is full of good people, great music, and even better memories. 
             May this next year be the one where everything just clicks into place. Cheers to you!
         </p>
-
         <p style="font-weight: bold; color: var(--accent); margin-top: 10px;">
             "millo mere say!!!! 😭😭😭😭"
         </p>
-
         <div class="signature">With Love,</div>
-        
         <button class="close-btn" onclick="closeMagic()">[ Close Letter ]</button>
     </div>
 
@@ -221,44 +236,35 @@
         const aura = document.getElementById('aura');
         const letter = document.getElementById('letter');
 
-        // Mouse Move Aura & Tilt Effect
+        // Mouse Move Effect (Disabled on small screens for better performance)
         document.addEventListener('mousemove', (e) => {
-            const x = (window.innerWidth / 2 - e.pageX) / 25;
-            const y = (window.innerHeight / 2 - e.pageY) / 25;
-            
-            card.style.transform = `rotateY(${-x}deg) rotateX(${y}deg)`;
-            aura.style.transform = `translate(${e.pageX - 300}px, ${e.pageY - 300}px)`;
+            if (window.innerWidth > 768) {
+                const x = (window.innerWidth / 2 - e.pageX) / 25;
+                const y = (window.innerHeight / 2 - e.pageY) / 25;
+                card.style.transform = `rotateY(${-x}deg) rotateX(${y}deg)`;
+                aura.style.transform = `translate(${e.pageX - 300}px, ${e.pageY - 300}px)`;
+            }
         });
 
-        // Open Letter Logic
         function openMagic() {
             letter.classList.add('active');
             card.style.opacity = '0';
             card.style.pointerEvents = 'none';
             
-            // Celebration!
-            const count = 200;
-            const defaults = { origin: { y: 0.7 }, zIndex: 1000 };
-
-            function fire(particleRatio, opts) {
-                confetti({ ...defaults, ...opts, particleCount: Math.floor(count * particleRatio) });
-            }
-
-            fire(0.25, { spread: 26, startVelocity: 55 });
-            fire(0.2, { spread: 60 });
-            fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
-            fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
-            fire(0.1, { spread: 120, startVelocity: 45 });
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#ff385c', '#ffffff', '#ffccd5']
+            });
         }
 
-        // Close Letter Logic
         function closeMagic() {
             letter.classList.remove('active');
             card.style.opacity = '1';
             card.style.pointerEvents = 'all';
         }
 
-        // Image Zoom Logic
         function zoom(el) {
             const overlay = document.getElementById('overlay');
             const fullImg = document.getElementById('full-img');
